@@ -1,26 +1,41 @@
-body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background-color: #f4f4f4;
-}
-
+/* 优化导航栏 */
 header {
     background: #333;
     color: white;
-    padding: 10px;
+    padding: 10px 20px; /* 调整内边距，增加两侧空隙 */
+    text-align: center;
+    position: fixed; /* 固定导航栏在顶部 */
+    top: 0;
+    width: 100%; /* 占满宽度 */
+    z-index: 1000; /* 保证导航栏在其他内容上方 */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 添加阴影效果 */
+}
+
+nav {
+    display: flex;
+    justify-content: center; /* 居中排列导航链接 */
+    align-items: center;
 }
 
 nav a {
     color: white;
     margin: 0 15px;
     text-decoration: none;
+    font-size: 16px; /* 调整文字大小 */
+    padding: 8px 12px; /* 增加点击区域 */
+    border-radius: 5px; /* 添加圆角 */
+    transition: background-color 0.3s ease; /* 添加悬停过渡效果 */
 }
 
-section {
-    margin: 20px;
+nav a:hover {
+    background-color: #575757; /* 悬停时更明显 */
+    text-decoration: none; /* 保持悬停时无下划线 */
 }
 
-.gallery img {
-    width: 200px;
-    margin: 10px;
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+    margin: 0; /* 删除默认间距 */
+    padding-top: 60px; /* 给页面内容顶部留出导航栏的高度 */
 }
