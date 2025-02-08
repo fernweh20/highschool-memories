@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>加密日记</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> <!-- 引入 CryptoJS -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #333;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+        }
+        .diary-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button {
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background: #555;
+        }
+        .diary-entry {
+            background: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        footer {
+            background: #333;
+            color: white;
+            padding: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>🔒 加密日记</header>
+
+    <section class="diary-container">
+        <h2>🔐 输入密码访问你的日记</h2>
+        <input type="password" id="password" placeholder="输入密码">
+        <button onclick="unlockDiary()">解锁日记</button>
+
+        <div id="diary-content" style="display:none;">
+            <h2>📝 写下你的日记</h2>
+            <textarea id="diaryText" placeholder="今天发生了什么有趣的事情？"></textarea>
+            <button onclick="saveDiary()">💾 保存日记</button>
+            <h2>📅 过往日记</h2>
+            <div id="diaryEntries"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2023级20班 | <a href="index.html">返回首页</a></p>
+    </footer>
+
+    <script>
+        const encryptionKey = "my-secret-key"; // 这里可以换成用户自定义的密钥
+
+        function encrypt(text, key) {
+            return CryptoJS.AES.encrypt(text, key).toString();
+        }
+
+        function decrypt(ciphertext, key) {
+            try {
+                let bytes = CryptoJS.AES.decrypt(ciphertext, key);
+                return bytes.toString(CryptoJS.enc.Utf8);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function saveDiary() {
+            let diaryText = document.getElementById("diaryText").value.trim();
+            if (diaryText === "") {
+                alert("请输入日记内容！");
+                return;
+            }
+
+            let password = document.getElementById("password").value.trim();
+            if (password === "") {
+                alert("请先输入密码！");
+                return;
+            }
+
+            let encryptedText = encrypt(diaryText, password); // 使用输入密码加密
+            let diaryEntries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+            let date = new Date();
+            let formattedDate = date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日 " +
+                                date.getHours().toString().padStart(2, '0') + ":" + 
+                                date.getMinutes().toString().padStart(2, '0');
+
+            diaryEntries.unshift({ date: formattedDate, text: encryptedText }); // 插入最新加密日记
+            localStorage.setItem("diaryEntries", JSON.stringify(diaryEntries));
+            document.getElementById("diaryText").value = ""; // 清空输入框
+            loadDiaries(password); // 重新加载日记
+        }
+
+        function loadDiaries(password) {
+            let diaryEntries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
+            let diaryContainer = document.getElementById("diaryEntries");
+            diaryContainer.innerHTML = "";
+
+            if (diaryEntries.length === 0) {
+                diaryContainer.innerHTML = "<p>📭 暂无日记记录</p>";
+                return;
+            }
+
+            diaryEntries.forEach(entry => {
+                let decryptedText = decrypt(entry.text, password);
+                if (decryptedText) {
+                    let diaryDiv = document.createElement("div");
+                    diaryDiv.classList.add("diary-entry");
+                    diaryDiv.innerHTML = `<strong>${entry.date}</strong><p>${decryptedText}</p>`;
+                    diaryContainer.appendChild(diaryDiv);
+                } else {
+                    diaryContainer.innerHTML = "<p>❌ 密码错误，无法解密日记！</p>";
+                }
+            });
+        }
+
+        function unlockDiary() {
+            let password = document.getElementById("password").value.trim();
+            if (password === "") {
+                alert("请输入密码！");
+                return;
+            }
+
+            document.getElementById("diary-content").style.display = "block";
+            loadDiaries(password);
+        }
+    </script>
+</body>
+</html>
