@@ -26,6 +26,9 @@
         <img src="IMG_2024Asports.jpg" alt="班级合照">
     </section>
 
+    <!-- 运行时间 & 倒计时 -->
+    <div id="runtime-text" style="text-align:center; font-size:14px; margin-top:20px;"></div>
+
     <footer>
         <div id="footer"></div>
         <script>
@@ -43,12 +46,11 @@
         <button id="accept-cookie">接受</button>
     </div>
 
-    <!-- 运行时间 & 倒计时脚本 -->
     <script>
         function updateRuntime() {
             let now = new Date();
-            let siteStartTime = new Date("08/02/2025 20:00:00"); // 网站上线时间
-            let gaokaoDate = new Date("2026-06-07T00:00:00"); // 高考时间
+            let siteStartTime = new Date("2025-02-07T20:00:00"); // ISO 格式，避免浏览器兼容问题
+            let gaokaoDate = new Date("2026-06-07T00:00:00");
 
             // 计算网站运行时间
             let timeDiff = now - siteStartTime;
@@ -64,7 +66,7 @@
             if (gaokaoDiff > 0) {
                 let remainingSeconds = Math.floor(gaokaoDiff / 1000);
                 if (remainingSeconds >= 86400) {
-                    let daysUntilGaokao = Math.ceil(remainingSeconds / 86400);
+                    let daysUntilGaokao = Math.floor(remainingSeconds / 86400); // 修正计算方法
                     gaokaoCountdown = `📚 距离2026年高考还有 <b>${daysUntilGaokao}</b> 天，加油！`;
                 } else {
                     let gHours = String(Math.floor(remainingSeconds / 3600)).padStart(2, "0");
@@ -86,6 +88,16 @@
         // 每秒更新
         setInterval(updateRuntime, 1000);
         updateRuntime();
+
+        // Cookie 弹窗处理
+        document.getElementById("accept-cookie").addEventListener("click", function () {
+            document.getElementById("cookie-banner").style.display = "none";
+            localStorage.setItem("cookieAccepted", "true");
+        });
+
+        if (localStorage.getItem("cookieAccepted") === "true") {
+            document.getElementById("cookie-banner").style.display = "none";
+        }
     </script>
 </body>
 </html>
