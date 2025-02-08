@@ -1,4 +1,3 @@
-＜script＞
 // 检查 Cookie 同意状态
 document.addEventListener('DOMContentLoaded', function () {
     const cookieBanner = document.getElementById('cookie-banner');
