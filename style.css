@@ -5,10 +5,28 @@ body {
 }
 
 header {
-    background: #333;
-    color: white;
-    padding: 10px;
+    /* 调整导航栏高度 */
+nav {
+    background-color: #333;
+    padding: 10px 20px; /* 调整内边距 */
+    text-align: center;
 }
+
+nav a {
+    color: white;
+    text-decoration: none;
+    margin: 0 15px;
+    font-size: 16px; /* 调整字体大小 */
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* 调整标题布局 */
+header h1 {
+    font-size: 28px; /* 调整字体大小 */
+    margin: 10px 0; /* 减
 
 nav a {
     color: white;
