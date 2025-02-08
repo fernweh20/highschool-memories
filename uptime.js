@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     // 设定网站启动的时间（请修改为实际的启动日期）
-    const siteLaunchDate = new Date("2025-02-08T18:00:00");
+    const siteLaunchDate = new Date("08/02/2025 18:00:00");
 
     function updateUptime() {
         const now = new Date();
