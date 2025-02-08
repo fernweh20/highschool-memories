@@ -14,6 +14,7 @@
             <a href="teachers.html">老师介绍</a>
             <a href="gallery.html">照片墙</a>
             <a href="guestbook.html">留言板</a>
+            <a href="diary.html">日记</a>
             <a href="about.html">关于</a>
             <a href="contact.html">联系我们</a>
         </nav>
@@ -23,51 +24,53 @@
         <h2>我们的故事</h2>
         <p>这是一个记录我们高中青春回忆的网站，我们在这里分享快乐，怀念过往的美好时光。</p>
         <img src="images/memories.jpg" alt="青春回忆">
-    
+
         <h2>我们的成长历程</h2>
-    <div class="timeline-item">
-        <div class="timeline-content">
-            <h3>2023.9</h3>
-            <p>进入高中，开启了青春的美好旅程。</p>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>2023.9</h3>
+                <p>进入高中，开启了青春的美好旅程。</p>
+            </div>
         </div>
-    </div>
-    <div class="timeline-item">
-        <div class="timeline-content">
-            <h3>2024.3</h3>
-            <p>我们在20班相聚，一起挥洒汗水与激情，留下难忘的回忆。</p>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>2024.3</h3>
+                <p>我们在20班相聚，一起挥洒汗水与激情，留下难忘的回忆。</p>
+            </div>
         </div>
-    </div>
-    <div class="timeline-item">
-        <div class="timeline-content">
-            <h3>2025</h3>
-            <p>我们的高中生活还在继续！</p>
+        <div class="timeline-item">
+            <div class="timeline-content">
+                <h3>2025</h3>
+                <p>我们的高中生活还在继续！</p>
+            </div>
         </div>
-    </div>
-        </section>
     </section>
 
+    <!-- 运行时间 & 倒计时 -->
+    <div id="runtime-text" style="text-align:center; font-size:14px; margin-top:20px;"></div>
+
     <footer>
-         <div id="footer"></div>
-<script>
-    fetch('footer.html')
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById('footer').innerHTML = data;
-    });
-</script>
+        <div id="footer"></div>
+        <script>
+            fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer').innerHTML = data;
+            });
+        </script>
     </footer>
+
     <!-- Cookie 请求弹窗 -->
     <div id="cookie-banner" class="cookie-banner">
         <p>我们使用 Cookie 来优化您的浏览体验。继续使用网站即表示您同意我们的 <a href="privacy-policy.html" target="_blank">隐私政策</a>。</p>
         <button id="accept-cookie">接受</button>
     </div>
 
-    <!-- 运行时间 & 倒计时脚本 -->
     <script>
         function updateRuntime() {
             let now = new Date();
-            let siteStartTime = new Date("08/02/2025 20:00:00"); // 网站上线时间
-            let gaokaoDate = new Date("2026-06-07T00:00:00"); // 高考时间
+            let siteStartTime = new Date("2025-02-08T20:00:00");
+            let gaokaoDate = new Date("2026-06-07T00:00:00");
 
             // 计算网站运行时间
             let timeDiff = now - siteStartTime;
@@ -78,33 +81,34 @@
             let seconds = String(totalSeconds % 60).padStart(2, "0");
 
             // 计算高考倒计时
-            let gaokaoCountdown = "";
             let gaokaoDiff = gaokaoDate - now;
+            let gaokaoCountdown = "";
             if (gaokaoDiff > 0) {
                 let remainingSeconds = Math.floor(gaokaoDiff / 1000);
-                if (remainingSeconds >= 86400) {
-                    let daysUntilGaokao = Math.ceil(remainingSeconds / 86400);
-                    gaokaoCountdown = `📚 距离2026年高考还有 <b>${daysUntilGaokao}</b> 天，加油！`;
-                } else {
-                    let gHours = String(Math.floor(remainingSeconds / 3600)).padStart(2, "0");
-                    let gMinutes = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, "0");
-                    let gSeconds = String(remainingSeconds % 60).padStart(2, "0");
-                    gaokaoCountdown = `📚 距离2026年高考还有 <b>${gHours}</b> 小时 <b>${gMinutes}</b> 分钟 <b>${gSeconds}</b> 秒，加油！`;
-                }
+                let daysUntilGaokao = Math.floor(remainingSeconds / 86400);
+                gaokaoCountdown = `📚 距离2026年高考还有 <b>${daysUntilGaokao}</b> 天，加油！`;
             } else {
-                gaokaoCountdown = "🎉 高考加油！愿你金榜题名！";
+                gaokaoCountdown = "🎉 高考已经开始！祝你成功！";
             }
 
-            // 更新 HTML
             document.getElementById("runtime-text").innerHTML = `
                 ⏳ 本站已运行 <b>${days}</b> 天 <b>${hours}</b> 小时 <b>${minutes}</b> 分钟 <b>${seconds}</b> 秒 <br>
                 ${gaokaoCountdown}
             `;
         }
 
-        // 每秒更新
         setInterval(updateRuntime, 1000);
         updateRuntime();
+
+        // Cookie 弹窗处理
+        document.getElementById("accept-cookie").addEventListener("click", function () {
+            document.getElementById("cookie-banner").style.display = "none";
+            localStorage.setItem("cookieAccepted", "true");
+        });
+
+        if (localStorage.getItem("cookieAccepted") === "true") {
+            document.getElementById("cookie-banner").style.display = "none";
+        }
     </script>
 </body>
 </html>
