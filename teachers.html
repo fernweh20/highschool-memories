@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我们的老师</title>
-    <link rel="stylesheet" href="style.css"> <!-- 关联你的CSS文件 -->
+    <link rel="stylesheet" href="style.css"> <!-- 关联CSS文件 -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,6 +56,19 @@
             color: #666;
         }
 
+        .last-updated {
+            font-size: 12px;
+            color: gray;
+            margin-top: 5px;
+        }
+
+        .disclaimer {
+            text-align: center;
+            font-size: 14px;
+            color: red;
+            margin: 20px;
+        }
+
         footer {
             margin-top: 20px;
             background: #333;
@@ -68,12 +81,13 @@
     <header>我们的老师</header>
 
     <section class="teacher-container">
-        <!-- 示例教师卡片 -->
+        <!-- 教师卡片 -->
         <div class="teacher-card">
             <img src="images/teacher1.jpg" alt="老师1">
             <h3>李大伟</h3>
             <p>教授科目：数学</p>
             <p>“暂无”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">08/02/2026 21:01:09</span></p>
         </div>
 
         <div class="teacher-card">
@@ -81,6 +95,7 @@
             <h3>孙瑛</h3>
             <p>教授科目：语文</p>
             <p>“暂无”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">08/02/2026 21:06:39</span></p>
         </div>
 
         <div class="teacher-card">
@@ -88,20 +103,23 @@
             <h3>宋沛沛</h3>
             <p>教授科目：英语</p>
             <p>“暂无”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">08/02/2026 21:07:57</span></p>
         </div>
 
         <div class="teacher-card">
-            <img src="images/teacher3.jpg" alt="老师3">
+            <img src="images/teacher3.jpg" alt="老师4">
             <h3>待提供</h3>
             <p>教授科目：日语</p>
             <p>“待提供”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">08/02/2026 21:10:43</span></p>
         </div>
 
         <div class="teacher-card">
-            <img src="images/teacher3.jpg" alt="老师3">
+            <img src="images/teacher3.jpg" alt="老师5">
             <h3>崔伟伟</h3>
             <p>教授科目：政治</p>
             <p>“暂无”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">08/02/2026 21:11:19</span></p>
         </div>
 
         <div class="teacher-card">
@@ -109,6 +127,7 @@
             <h3>张莹雪</h3>
             <p>教授科目：历史</p>
             <p>“暂无”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">加载中...</span></p>
         </div>
 
         <div class="teacher-card">
@@ -116,11 +135,30 @@
             <h3>李文迅</h3>
             <p>教授科目：地理</p>
             <p>“暂无”</p>
+            <p class="last-updated">最后编辑时间：<span class="edit-date">加载中...</span></p>
         </div>
     </section>
+
+    <!-- 统一声明 -->
+    <div class="disclaimer">
+        <p>* 以上教师信息由学生整理，仅供参考。</p>
+    </div>
 
     <footer>
         <p>&copy; 2023级20班 | <a href="index.html">返回首页</a></p>
     </footer>
+
+    <!-- JavaScript 自动更新时间 -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const editDates = document.querySelectorAll(".edit-date");
+            const lastModified = new Date(document.lastModified);
+            const formattedDate = lastModified.toISOString().split("T")[0]; // YYYY-MM-DD 格式
+
+            editDates.forEach(dateElement => {
+                dateElement.textContent = formattedDate;
+            });
+        });
+    </script>
 </body>
 </html>
