@@ -85,3 +85,44 @@ section {
     width: 200px;
     margin: 10px;
 }
+
+/* Cookie Banner 样式 */
+.cookie-banner {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    padding: 15px 20px;
+    text-align: center;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    display: none; /* 初始状态为隐藏 */
+    z-index: 1000;
+}
+
+.cookie-banner p {
+    margin: 0;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.cookie-banner a {
+    color: #4CAF50;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.cookie-banner button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin-left: 20px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.cookie-banner button:hover {
+    background-color: #45a049;
+}
