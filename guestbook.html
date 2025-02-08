@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>留言板</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="photos.html">照片墙</a>
+            <a href="guestbook.html">留言板</a>
+            <a href="about.html">关于</a>
+        </nav>
+    </header>
+
+    <section class="guestbook">
+        <h2>欢迎留言</h2>
+        <form id="guestbook-form">
+            <textarea id="message" placeholder="在此输入您的留言..." required></textarea>
+            <button type="submit">提交留言</button>
+        </form>
+
+        <div id="messages">
+            <!-- 留言内容将动态加载到这里 -->
+        </div>
+    </section>
+
+    <footer>
+        <p>由 ChatGPT 帮助搭建 | <a href="https://icp.gov.moe/?keyword=20250750" target="_blank">萌ICP备20250750号</a></p>
+    </footer>
+
+    <script src="guestbook.js"></script>
+</body>
+</html>
