@@ -21,6 +21,7 @@
             <a href="classmates.html">同学录</a>
             <a href="gallery.html">照片墙</a>
             <a href="guestbook.html">留言板</a>
+            <a href="about.html">关于</a>
         </nav>
     </header>
 
@@ -32,6 +33,14 @@
 
     <footer>
         <p>© 2025 青春回忆录 | 由 GitHub Pages 驱动</p>
+    <div id="footer"></div>
+<script>
+    fetch('footer.html')
+    .then(response => response.text())
+    .then(data => {
+        document.getElementById('footer').innerHTML = data;
+    });
+</script>
     </footer>
 </body>
 </html>
