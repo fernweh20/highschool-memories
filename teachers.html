@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我们的老师</title>
+    <link rel="stylesheet" href="style.css"> <!-- 关联你的CSS文件 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        header {
+            background: #333;
+            color: white;
+            padding: 15px;
+            font-size: 24px;
+        }
+
+        .teacher-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px;
+        }
+
+        .teacher-card {
+            background: white;
+            padding: 15px;
+            margin: 10px;
+            width: 280px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .teacher-card img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .teacher-card h3 {
+            margin: 10px 0;
+            font-size: 20px;
+        }
+
+        .teacher-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        footer {
+            margin-top: 20px;
+            background: #333;
+            color: white;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>我们的老师</header>
+
+    <section class="teacher-container">
+        <!-- 示例教师卡片 -->
+        <div class="teacher-card">
+            <img src="images/teacher1.jpg" alt="老师1">
+            <h3>王老师</h3>
+            <p>教授科目：数学</p>
+            <p>“努力学习，不断进步！”</p>
+        </div>
+
+        <div class="teacher-card">
+            <img src="images/teacher2.jpg" alt="老师2">
+            <h3>李老师</h3>
+            <p>教授科目：语文</p>
+            <p>“书山有路勤为径，学海无涯苦作舟。”</p>
+        </div>
+
+        <div class="teacher-card">
+            <img src="images/teacher3.jpg" alt="老师3">
+            <h3>张老师</h3>
+            <p>教授科目：英语</p>
+            <p>“Learning never stops.”</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 我们的高中 | <a href="index.html">返回首页</a></p>
+    </footer>
+</body>
+</html>
