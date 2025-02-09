@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 // 显示动画 & 播放音乐
                 playBirthdayEffect();
+                <audio id="birthday-music" src="https://www.bensound.com/birthday-song.mp3" preload="auto"></audio>
             }
         });
 });
