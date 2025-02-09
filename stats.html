@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网站数据统计 - 青春回忆录</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+    <h1>📊 网站数据统计</h1>
+    <nav>
+        <a href="index.html">首页</a>
+        <a href="classmates.html">同学录</a>
+        <a href="teachers.html">老师介绍</a>
+        <a href="gallery.html">照片墙</a>
+        <a href="guestbook.html">留言板</a>
+        <a href="events.html">重大事件</a>
+        <a href="culture.html">班级文化</a>
+        <a href="stats.html">数据统计</a>
+        <a href="about.html">关于</a>
+        <a href="contact.html">联系我们</a>
+    </nav>
+</header>
+
+<section class="stats">
+    <h2>📈 站点数据概览</h2>
+    <div class="stat-box">
+        <p>👀 网站访问量： <span id="visit-count">加载中...</span></p>
+        <p>💬 留言板留言数： <span id="message-count">0</span></p>
+        <p>📌 同学录申请数： <span id="classmates-apply">0</span></p>
+    </div>
+
+    <h3>📊 访问趋势（最近 7 天）</h3>
+    <canvas id="visitChart"></canvas>
+</section>
+
+<footer>
+    <p>© 2025 2023级20班 | 由 GitHub Pages 驱动</p>
+    <p><a href="https://icp.gov.moe/?keyword=20250750" target="_blank">萌ICP备20250750号</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // 获取并更新访问量
+    function updateVisitCount() {
+        let visitCount = localStorage.getItem("visitCount") || 0;
+        visitCount++;
+        localStorage.setItem("visitCount", visitCount);
+        document.getElementById("visit-count").textContent = visitCount;
+    }
+
+    // 模拟留言板留言数（可替换为后台数据）
+    function updateMessageCount() {
+        let messageCount = localStorage.getItem("messageCount") || 5; // 假设已有5条留言
+        document.getElementById("message-count").textContent = messageCount;
+    }
+
+    // 模拟同学录申请数（手动更新或通过 API 获取）
+    function updateClassmatesApply() {
+        let applyCount = localStorage.getItem("classmatesApply") || 3; // 假设已有3个申请
+        document.getElementById("classmates-apply").textContent = applyCount;
+    }
+
+    // 初始化数据
+    updateVisitCount();
+    updateMessageCount();
+    updateClassmatesApply();
+
+    // 模拟访问趋势数据
+    const visitData = JSON.parse(localStorage.getItem("visitData")) || [10, 20, 30, 25, 15, 35, 40]; // 7 天数据
+    const days = ["周一", "周二", "周三", "周四", "周五", "周六", "周日"];
+
+    // 绘制折线图
+    const ctx = document.getElementById("visitChart").getContext("2d");
+    new Chart(ctx, {
+        type: "line",
+        data: {
+            labels: days,
+            datasets: [{
+                label: "每日访问量",
+                data: visitData,
+                borderColor: "#007bff",
+                borderWidth: 2,
+                fill: false
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+</script>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    header {
+        background: #007bff;
+        color: #fff;
+        padding: 15px;
+        text-align: center;
+    }
+
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+
+    .stats {
+        max-width: 800px;
+        margin: 20px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2, h3 {
+        color: #007bff;
+    }
+
+    .stat-box {
+        padding: 15px;
+        background: #e3f2fd;
+        border-radius: 5px;
+        margin: 10px 0;
+    }
+
+    .stat-box p {
+        font-size: 18px;
+    }
+
+    canvas {
+        max-width: 100%;
+        margin-top: 20px;
+    }
+
+    footer {
+        text-align: center;
+        padding: 10px;
+        background: #007bff;
+        color: white;
+        margin-top: 20px;
+    }
+
+    footer a {
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+</body>
+</html>
