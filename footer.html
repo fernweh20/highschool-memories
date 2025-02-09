@@ -5,6 +5,48 @@
     <p><a href="https://icp.gov.moe/?keyword=20250750" target="_blank">萌ICP备20250750号</a></p>
     <p><a href="privacy-policy.html">🔒 隐私政策</a> | <a href="disclaimer.html">📜 免责声明</a></p>
     <p>© 2025 2023级20班 | 由 GitHub Pages 驱动</p>
+       <script>
+        function updateRuntime() {
+            let now = new Date();
+            let siteStartTime = new Date("2025-02-08T20:00:00"); // ISO 格式，避免浏览器兼容问题
+            let gaokaoDate = new Date("2026-06-07T00:00:00");
+
+            // 计算网站运行时间
+            let timeDiff = now - siteStartTime;
+            let totalSeconds = Math.floor(timeDiff / 1000);
+            let days = Math.floor(totalSeconds / 86400);
+            let hours = String(Math.floor((totalSeconds % 86400) / 3600)).padStart(2, "0");
+            let minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, "0");
+            let seconds = String(totalSeconds % 60).padStart(2, "0");
+
+            // 计算高考倒计时
+            let gaokaoCountdown = "";
+            let gaokaoDiff = gaokaoDate - now;
+            if (gaokaoDiff > 0) {
+                let remainingSeconds = Math.floor(gaokaoDiff / 1000);
+                if (remainingSeconds >= 86400) {
+                    let daysUntilGaokao = Math.floor(remainingSeconds / 86400); // 修正计算方法
+                    gaokaoCountdown = `📚 距离2026年高考还有 <b>${daysUntilGaokao}</b> 天，加油！`;
+                } else {
+                    let gHours = String(Math.floor(remainingSeconds / 3600)).padStart(2, "0");
+                    let gMinutes = String(Math.floor((remainingSeconds % 3600) / 60)).padStart(2, "0");
+                    let gSeconds = String(remainingSeconds % 60).padStart(2, "0");
+                    gaokaoCountdown = `📚 距离2026年高考还有 <b>${gHours}</b> 小时 <b>${gMinutes}</b> 分钟 <b>${gSeconds}</b> 秒，加油！`;
+                }
+            } else {
+                gaokaoCountdown = "🎉 高考加油！愿你金榜题名！";
+            }
+
+            // 更新 HTML
+            document.getElementById("runtime-text").innerHTML = `
+                ⏳ 本站已运行 <b>${days}</b> 天 <b>${hours}</b> 小时 <b>${minutes}</b> 分钟 <b>${seconds}</b> 秒 <br>
+                ${gaokaoCountdown}
+            `;
+        }
+
+        // 每秒更新
+        setInterval(updateRuntime, 1000);
+        updateRuntime()
     </div>
 </footer>
     
