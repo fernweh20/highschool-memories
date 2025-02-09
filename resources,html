@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>课程资源分享 - 青春回忆录</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>📚 课程资源分享</h1>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="classmates.html">同学录</a>
+            <a href="resources.html">课程资源</a>
+            <a href="guestbook.html">留言板</a>
+            <a href="contact.html">联系我们</a>
+        </nav>
+    </header>
+
+    <section>
+        <h2>📖 资源列表</h2>
+        <input type="text" id="searchBox" placeholder="🔍 搜索课程资源..." onkeyup="searchResources()">
+        
+        <table id="resourceTable">
+            <thead>
+                <tr>
+                    <th>类别</th>
+                    <th>资源名称</th>
+                    <th>上传者</th>
+                    <th>下载</th>
+                </tr>
+            </thead>
+            <tbody id="resourceList">
+                <!-- 资源数据将由 JavaScript 动态填充 -->
+            </tbody>
+        </table>
+    </section>
+
+    <section id="uploadSection" style="display: none;">
+        <h2>📤 提交新资源（仅管理员）</h2>
+        <form id="uploadForm">
+            <label>类别：</label>
+            <select id="category">
+                <option value="数学">数学</option>
+                <option value="语文">语文</option>
+                <option value="英语">英语</option>
+                <option value="物理">物理</option>
+                <option value="化学">化学</option>
+            </select>
+            <br>
+            <label>资源名称：</label>
+            <input type="text" id="resourceName" required>
+            <br>
+            <label>网盘链接：</label>
+            <input type="url" id="resourceLink" required placeholder="https://pan.baidu.com/xxxx">
+            <br>
+            <button type="button" onclick="submitResource()">提交</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>© 2025 2023级20班 | 由 GitHub Pages 驱动</p>
+        <p><a href="https://icp.gov.moe/?keyword=20250750" target="_blank">萌ICP备20250750号</a></p>
+    </footer>
+
+    <script src="resources.js"></script>
+</body>
+</html>
