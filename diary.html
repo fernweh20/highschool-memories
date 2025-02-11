@@ -2,162 +2,145 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>加密日记</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script> <!-- 引入 CryptoJS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的日记</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            text-align: center;
-            margin: 0;
+            color: #333;
+            margin: 20px;
             padding: 0;
         }
-        header {
-            background: #333;
-            color: white;
-            padding: 15px;
-            font-size: 24px;
-        }
-        .diary-container {
+        .container {
             max-width: 600px;
-            margin: 20px auto;
-            background: white;
+            margin: auto;
+            background: #fff;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: left;
         }
-        textarea, input {
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            background: #333;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            margin-top: 10px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        button:hover {
-            background: #555;
+        h1 {
+            text-align: center;
+            color: #007bff;
         }
         .diary-entry {
-            background: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            margin: 10px 0;
+            border-bottom: 1px solid #ddd;
+            padding: 15px 0;
+            cursor: pointer;
         }
-        footer {
-            background: #333;
-            color: white;
-            padding: 10px;
-            margin-top: 20px;
+        .diary-entry:hover {
+            background-color: #f9f9f9;
+        }
+        .date {
+            font-size: 14px;
+            color: #666;
+        }
+        .content-preview {
+            font-size: 16px;
+            color: #444;
+        }
+        /* 模态框样式 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        .close {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <header>🔒 加密日记</header>
 
-    <section class="diary-container">
-        <h2>🔐 输入密码访问你的日记</h2>
-        <input type="password" id="password" placeholder="输入密码">
-        <button onclick="unlockDiary()">解锁日记</button>
+    <div class="container">
+        <h1>📖 我的日记</h1>
+        <div id="diary-list"></div>
+    </div>
 
-        <div id="diary-content" style="display:none;">
-            <h2>📝 写下你的日记</h2>
-            <textarea id="diaryText" placeholder="今天发生了什么有趣的事情？"></textarea>
-            <button onclick="saveDiary()">💾 保存日记</button>
-            <h2>📅 过往日记</h2>
-            <div id="diaryEntries"></div>
+    <!-- 模态框（显示文章详情） -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modal-title"></h2>
+            <p class="date" id="modal-date"></p>
+            <p id="modal-content"></p>
         </div>
-    </section>
-
-    <footer>
-        <p>&copy; 2023级20班 | <a href="index.html">返回首页</a></p>
-    </footer>
+    </div>
 
     <script>
-        const encryptionKey = "my-secret-key"; // 这里可以换成用户自定义的密钥
+        // 文章数据（可以从服务器获取）
+        const diaryEntries = [
+            {
+                title: "今天的思考",
+                date: "2025-02-11",
+                content: "今天我思考了如何优化网站性能，并尝试了新的缓存策略。"
+            },
+            {
+                title: "阳光明媚的一天",
+                date: "2025-02-10",
+                content: "今天的天气特别好，阳光明媚，适合出去散步放松心情。"
+            },
+            {
+                title: "编程的乐趣",
+                date: "2025-02-09",
+                content: "我发现编程就像解谜，每一次解决问题都会有满满的成就感！"
+            }
+        ];
 
-        function encrypt(text, key) {
-            return CryptoJS.AES.encrypt(text, key).toString();
+        // 按日期排序（最新的在前）
+        diaryEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        // 生成日记列表
+        const diaryList = document.getElementById("diary-list");
+        diaryEntries.forEach(entry => {
+            const entryDiv = document.createElement("div");
+            entryDiv.classList.add("diary-entry");
+            entryDiv.innerHTML = `
+                <h3>${entry.title}</h3>
+                <p class="date">${entry.date}</p>
+                <p class="content-preview">${entry.content.substring(0, 30)}...</p>
+            `;
+            entryDiv.addEventListener("click", () => openModal(entry));
+            diaryList.appendChild(entryDiv);
+        });
+
+        // 显示模态框
+        function openModal(entry) {
+            document.getElementById("modal-title").textContent = entry.title;
+            document.getElementById("modal-date").textContent = entry.date;
+            document.getElementById("modal-content").textContent = entry.content;
+            document.getElementById("modal").style.display = "block";
         }
 
-        function decrypt(ciphertext, key) {
-            try {
-                let bytes = CryptoJS.AES.decrypt(ciphertext, key);
-                return bytes.toString(CryptoJS.enc.Utf8);
-            } catch (e) {
-                return null;
+        // 关闭模态框
+        document.querySelector(".close").addEventListener("click", () => {
+            document.getElementById("modal").style.display = "none";
+        });
+
+        // 点击外部区域关闭模态框
+        window.addEventListener("click", (event) => {
+            if (event.target === document.getElementById("modal")) {
+                document.getElementById("modal").style.display = "none";
             }
-        }
-
-        function saveDiary() {
-            let diaryText = document.getElementById("diaryText").value.trim();
-            if (diaryText === "") {
-                alert("请输入日记内容！");
-                return;
-            }
-
-            let password = document.getElementById("password").value.trim();
-            if (password === "") {
-                alert("请先输入密码！");
-                return;
-            }
-
-            let encryptedText = encrypt(diaryText, password); // 使用输入密码加密
-            let diaryEntries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
-            let date = new Date();
-            let formattedDate = date.getFullYear() + "年" + (date.getMonth() + 1) + "月" + date.getDate() + "日 " +
-                                date.getHours().toString().padStart(2, '0') + ":" + 
-                                date.getMinutes().toString().padStart(2, '0');
-
-            diaryEntries.unshift({ date: formattedDate, text: encryptedText }); // 插入最新加密日记
-            localStorage.setItem("diaryEntries", JSON.stringify(diaryEntries));
-            document.getElementById("diaryText").value = ""; // 清空输入框
-            loadDiaries(password); // 重新加载日记
-        }
-
-        function loadDiaries(password) {
-            let diaryEntries = JSON.parse(localStorage.getItem("diaryEntries")) || [];
-            let diaryContainer = document.getElementById("diaryEntries");
-            diaryContainer.innerHTML = "";
-
-            if (diaryEntries.length === 0) {
-                diaryContainer.innerHTML = "<p>📭 暂无日记记录</p>";
-                return;
-            }
-
-            diaryEntries.forEach(entry => {
-                let decryptedText = decrypt(entry.text, password);
-                if (decryptedText) {
-                    let diaryDiv = document.createElement("div");
-                    diaryDiv.classList.add("diary-entry");
-                    diaryDiv.innerHTML = `<strong>${entry.date}</strong><p>${decryptedText}</p>`;
-                    diaryContainer.appendChild(diaryDiv);
-                } else {
-                    diaryContainer.innerHTML = "<p>❌ 密码错误，无法解密日记！</p>";
-                }
-            });
-        }
-
-        function unlockDiary() {
-            let password = document.getElementById("password").value.trim();
-            if (password === "") {
-                alert("请输入密码！");
-                return;
-            }
-
-            document.getElementById("diary-content").style.display = "block";
-            loadDiaries(password);
-        }
+        });
     </script>
+
 </body>
 </html>
