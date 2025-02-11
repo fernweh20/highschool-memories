@@ -39,7 +39,7 @@
         const diaryFolder = "diary"; // 存放日记的文件夹
 
         async function fetchDiaries() {
-            const apiUrl = `https://api.github.com/repos/${githubRepo}/contents/${diaryFolder}`;
+            const apiUrl = `https://api.github.com/repos/Fernweh20/highschool-memories/contents/diary`;
             try {
                 const response = await fetch(apiUrl);
                 const files = await response.json();
