@@ -5,66 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>我的日记</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            color: #333;
-            margin: 20px;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #007bff;
-        }
-        .diary-entry {
-            border-bottom: 1px solid #ddd;
-            padding: 15px 0;
-            cursor: pointer;
-        }
-        .diary-entry:hover {
-            background-color: #f9f9f9;
-        }
-        .date {
-            font-size: 14px;
-            color: #666;
-        }
-        .content-preview {
-            font-size: 16px;
-            color: #444;
-        }
-        /* 模态框样式 */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-        }
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 80%;
-            max-width: 500px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-        .close {
-            float: right;
-            font-size: 20px;
-            cursor: pointer;
-        }
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; color: #333; margin: 20px; padding: 0; }
+        .container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
+        h1 { text-align: center; color: #007bff; }
+        .diary-entry { border-bottom: 1px solid #ddd; padding: 15px 0; cursor: pointer; }
+        .diary-entry:hover { background-color: #f9f9f9; }
+        .date { font-size: 14px; color: #666; }
+        .content-preview { font-size: 16px; color: #444; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); }
+        .modal-content { background-color: white; margin: 10% auto; padding: 20px; border-radius: 8px; width: 80%; max-width: 500px; }
+        .close { float: right; font-size: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -85,61 +35,63 @@
     </div>
 
     <script>
-        // 文章数据（可以从服务器获取）
-        const diaryEntries = [
-            {
-                title: "今天的思考",
-                date: "2025-02-11",
-                content: "今天我思考了如何优化网站性能，并尝试了新的缓存策略。"
-            },
-            {
-                title: "阳光明媚的一天",
-                date: "2025-02-10",
-                content: "今天的天气特别好，阳光明媚，适合出去散步放松心情。"
-            },
-            {
-                title: "编程的乐趣",
-                date: "2025-02-09",
-                content: "我发现编程就像解谜，每一次解决问题都会有满满的成就感！"
+        const githubRepo = "https://github.com/fernweh20/my-diary"; // GitHub 仓库
+        const diaryFolder = "diary"; // 存放日记的文件夹
+
+        async function fetchDiaries() {
+            const apiUrl = `https://api.github.com/repos/${githubRepo}/contents/${diaryFolder}`;
+            try {
+                const response = await fetch(apiUrl);
+                const files = await response.json();
+                if (!Array.isArray(files)) throw new Error("获取文件失败");
+
+                const diaryList = document.getElementById("diary-list");
+                diaryList.innerHTML = ""; // 清空旧内容
+
+                // 获取最新的 10 篇日记
+                const latestDiaries = files
+                    .filter(file => file.name.endsWith(".md"))
+                    .sort((a, b) => new Date(b.name.replace(".md", "")) - new Date(a.name.replace(".md", "")))
+                    .slice(0, 10);
+
+                for (let file of latestDiaries) {
+                    const fileContent = await fetch(file.download_url).then(res => res.text());
+                    const firstLine = fileContent.split("\n")[0].replace("# ", "").trim();
+                    const preview = fileContent.split("\n").slice(2).join(" ").substring(0, 50) + "...";
+
+                    const entryDiv = document.createElement("div");
+                    entryDiv.classList.add("diary-entry");
+                    entryDiv.innerHTML = `
+                        <h3>${firstLine}</h3>
+                        <p class="date">${file.name.replace(".md", "")}</p>
+                        <p class="content-preview">${preview}</p>
+                    `;
+                    entryDiv.addEventListener("click", () => openModal(firstLine, file.name.replace(".md", ""), fileContent));
+                    diaryList.appendChild(entryDiv);
+                }
+            } catch (error) {
+                console.error("加载日记失败:", error);
             }
-        ];
+        }
 
-        // 按日期排序（最新的在前）
-        diaryEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        // 生成日记列表
-        const diaryList = document.getElementById("diary-list");
-        diaryEntries.forEach(entry => {
-            const entryDiv = document.createElement("div");
-            entryDiv.classList.add("diary-entry");
-            entryDiv.innerHTML = `
-                <h3>${entry.title}</h3>
-                <p class="date">${entry.date}</p>
-                <p class="content-preview">${entry.content.substring(0, 30)}...</p>
-            `;
-            entryDiv.addEventListener("click", () => openModal(entry));
-            diaryList.appendChild(entryDiv);
-        });
-
-        // 显示模态框
-        function openModal(entry) {
-            document.getElementById("modal-title").textContent = entry.title;
-            document.getElementById("modal-date").textContent = entry.date;
-            document.getElementById("modal-content").textContent = entry.content;
+        function openModal(title, date, content) {
+            document.getElementById("modal-title").textContent = title;
+            document.getElementById("modal-date").textContent = `📅 日期：${date}`;
+            document.getElementById("modal-content").textContent = content;
             document.getElementById("modal").style.display = "block";
         }
 
-        // 关闭模态框
         document.querySelector(".close").addEventListener("click", () => {
             document.getElementById("modal").style.display = "none";
         });
 
-        // 点击外部区域关闭模态框
         window.addEventListener("click", (event) => {
             if (event.target === document.getElementById("modal")) {
                 document.getElementById("modal").style.display = "none";
             }
         });
+
+        fetchDiaries(); // 加载日记
     </script>
 
 </body>
